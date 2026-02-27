@@ -1,11 +1,17 @@
 from fastapi import APIRouter
 from typing import Optional
+from src.schemas.v1.user import User
 
 router = APIRouter()
 
 @router.get("/info/{name}")
 def info(name):
     return {"name" : name}
+
+
+@router.post('/info')
+def create_user(user:User):
+    return user
 
 @router.get("/contact/{contact}")
 def contact(contact):
