@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends , status,HTTPException, Query
 from sqlalchemy.orm import Session
 from src.models.user import User
-from src.schemas.v1.user import UserCreate,UserResponse
+from src.schemas.v1.user import UserCreate, UserResponse, UserUpdate
 from src.config.database import get_db
 from typing import List,Annotated
 from src.helpers.validate_unique_email import validate_unique_email 
@@ -25,7 +25,6 @@ def list_users(filters: Annotated[UserFilter, Query()], db:Session = Depends(get
     return query.all()
 
 
-
 @router.post('/',response_model=UserResponse,status_code=status.HTTP_201_CREATED)
 def create_users(user_data:UserCreate = Depends(validate_unique_email),db:Session = Depends(get_db)):
     try:
@@ -44,3 +43,26 @@ def create_users(user_data:UserCreate = Depends(validate_unique_email),db:Sessio
             status_code=500,
             detail="Failed to create user."
         )
+
+
+@router.put('/{user_id}', response_model=UserResponse, status_code=status.HTTP_200_OK)
+def update_user(user_id: int, user_data: UserUpdate, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found.")
+    update_fields = user_data.model_dump(exclude_unset=True)
+    for field, value in update_fields.items():
+        setattr(user, field, value)
+    db.commit()
+    db.refresh(user)
+    return user
+
+
+@router.delete('/{user_id}', status_code=status.HTTP_200_OK)
+def delete_user(user_id: int, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found.")
+    db.delete(user)
+    db.commit()
+    return {"status_code": status.HTTP_200_OK, "message": "The User is Deleted Successfully"}

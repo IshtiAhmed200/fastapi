@@ -11,6 +11,12 @@ class UserCreate(User):
     pass
 
 
+class UserUpdate(BaseModel):
+    email: EmailStr | None = None
+    first_name: str | None = Field(None, min_length=0, max_length=50)
+    last_name: str | None = Field(None, min_length=0, max_length=50)
+
+
 class UserResponse(User):
     id: int
     email: EmailStr
