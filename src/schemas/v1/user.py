@@ -3,8 +3,8 @@ from pydantic import BaseModel, EmailStr, Field
 
 class User(BaseModel):
     email: EmailStr
-    first_name: str = Field(..., min_length=0, max_length=50)
-    last_name: str = Field(..., min_length=0, max_length=50)
+    first_name: str = Field(default="", max_length=50)
+    last_name: str = Field(default="", max_length=50)
 
 
 class UserCreate(User):
@@ -13,14 +13,14 @@ class UserCreate(User):
 
 class UserUpdate(BaseModel):
     email: EmailStr | None = None
-    first_name: str | None = Field(None, min_length=0, max_length=50)
-    last_name: str | None = Field(None, min_length=0, max_length=50)
+    first_name: str | None = None
+    last_name: str | None = None
 
 
 class UserUpdateWithPassword(BaseModel):
     email: EmailStr | None = None
-    first_name: str | None = Field(None, min_length=0, max_length=50)
-    last_name: str | None = Field(None, min_length=0, max_length=50)
+    first_name: str | None = None
+    last_name: str | None = None
     password: str | None = Field(None, min_length=6)
 
 
