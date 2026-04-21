@@ -1,7 +1,8 @@
-from pydantic import BaseModel, EmailStr,Field
-from typing import List,Optional
+from pydantic import BaseModel, EmailStr
+from typing import Optional
 
-class UserFilter(BaseModel):
-    first_name:Optional[str] = Field(None,min_length=1)
-    last_name:Optional[str] = Field(None,min_length=1)
-    email:Optional[EmailStr] = None
+class UserFilter:
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    email: Optional[EmailStr] = None
+    search: Optional[str] = None
