@@ -4,12 +4,16 @@ from typing import Optional
 router = APIRouter()
 
 
-@router.get("/{name}")
-def bike(name : str):
+@router.get("/info")
+def bike(name : str = ...):
     return {"Bike Name" : name}
 
-@router.get("/{name}/{numPlate}")
-def bikeInfo(name : str, numPlate : str):
+@router.get("/details/{numPlate}")
+def bikeInfo(numPlate: str):
+    return {"Num Plate" : numPlate}
+
+@router.get("/information")
+def bikeInformation(name: str, numPlate: Optional[str] = None):
     return {
             "Bike Name" : name,
             "Num Plate" : numPlate

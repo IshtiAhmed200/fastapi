@@ -95,10 +95,11 @@ def create_users(user_data: UserCreate, db: Session = Depends(get_db)):
 
 
 @router.get('/{user_id}', response_model=UserResponse)
-def get_user(user_id: int, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    if current_user.id != user_id:
-        raise HTTPException(status_code=403, detail="Not authorized to view this user.")
-    return current_user
+def get_user(user_id: int, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found.")
+    return user
 
 
 @router.put('/{user_id}', response_model=UserResponse, status_code=status.HTTP_200_OK)
@@ -134,7 +135,7 @@ def delete_user(
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found.")
-    
+
     db.delete(user)
     db.commit()
     return {"status_code": status.HTTP_200_OK, "message": "The User is Deleted Successfully"}
