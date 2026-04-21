@@ -1,4 +1,4 @@
-#!/home/ishti-ahmed/Documents/Python_Programming/class/lesson/class_10/venv/bin/python3
+#!/home/ishti-ahmed/fastapi/venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys
